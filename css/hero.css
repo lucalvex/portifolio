@@ -86,15 +86,24 @@
 }
 @media (prefers-reduced-motion: reduce) {
   /* no flip, tilt or rising hearts: the photo crossfades into the face, which fades into the wink */
-  .portrait .coin { transition: none !important; transform: none !important; }
-  .portrait .front { transition: opacity 320ms ease; }
-  .portrait .back { transform: none; opacity: 0; transition: opacity 320ms ease; }
-  .portrait:hover .front, .portrait:focus-visible .front, .portrait[aria-pressed="true"] .front { opacity: 0; }
-  .portrait:hover .back, .portrait:focus-visible .back, .portrait[aria-pressed="true"] .back { opacity: 1; }
-  .portrait:hover .smile, .portrait:focus-visible .smile, .portrait[aria-pressed="true"] .smile { animation: smile-fade 2000ms ease-in-out both; }
-  .portrait:hover .wink, .portrait:focus-visible .wink, .portrait[aria-pressed="true"] .wink { animation: wink-fade 2000ms ease-in-out both; }
-  .portrait:hover .hearts span, .portrait:focus-visible .hearts span, .portrait[aria-pressed="true"] .hearts span { animation: heart-fade 1300ms ease calc(780ms + var(--d)) both; }
+  :root:not([data-motion="full"]) .portrait .coin { transition: none !important; transform: none !important; }
+  :root:not([data-motion="full"]) .portrait .front { transition: opacity 320ms ease; }
+  :root:not([data-motion="full"]) .portrait .back { transform: none; opacity: 0; transition: opacity 320ms ease; }
+  :root:not([data-motion="full"]) .portrait:hover .front, :root:not([data-motion="full"]) .portrait:focus-visible .front, :root:not([data-motion="full"]) .portrait[aria-pressed="true"] .front { opacity: 0; }
+  :root:not([data-motion="full"]) .portrait:hover .back, :root:not([data-motion="full"]) .portrait:focus-visible .back, :root:not([data-motion="full"]) .portrait[aria-pressed="true"] .back { opacity: 1; }
+  :root:not([data-motion="full"]) .portrait:hover .smile, :root:not([data-motion="full"]) .portrait:focus-visible .smile, :root:not([data-motion="full"]) .portrait[aria-pressed="true"] .smile { animation: smile-fade 2000ms ease-in-out both; }
+  :root:not([data-motion="full"]) .portrait:hover .wink, :root:not([data-motion="full"]) .portrait:focus-visible .wink, :root:not([data-motion="full"]) .portrait[aria-pressed="true"] .wink { animation: wink-fade 2000ms ease-in-out both; }
+  :root:not([data-motion="full"]) .portrait:hover .hearts span, :root:not([data-motion="full"]) .portrait:focus-visible .hearts span, :root:not([data-motion="full"]) .portrait[aria-pressed="true"] .hearts span { animation: heart-fade 1300ms ease calc(780ms + var(--d)) both; }
 }
+:root[data-motion="reduced"] .portrait .coin { transition: none !important; transform: none !important; }
+  :root[data-motion="reduced"] .portrait .front { transition: opacity 320ms ease; }
+  :root[data-motion="reduced"] .portrait .back { transform: none; opacity: 0; transition: opacity 320ms ease; }
+  :root[data-motion="reduced"] .portrait:hover .front, :root[data-motion="reduced"] .portrait:focus-visible .front, :root[data-motion="reduced"] .portrait[aria-pressed="true"] .front { opacity: 0; }
+  :root[data-motion="reduced"] .portrait:hover .back, :root[data-motion="reduced"] .portrait:focus-visible .back, :root[data-motion="reduced"] .portrait[aria-pressed="true"] .back { opacity: 1; }
+  :root[data-motion="reduced"] .portrait:hover .smile, :root[data-motion="reduced"] .portrait:focus-visible .smile, :root[data-motion="reduced"] .portrait[aria-pressed="true"] .smile { animation: smile-fade 2000ms ease-in-out both; }
+  :root[data-motion="reduced"] .portrait:hover .wink, :root[data-motion="reduced"] .portrait:focus-visible .wink, :root[data-motion="reduced"] .portrait[aria-pressed="true"] .wink { animation: wink-fade 2000ms ease-in-out both; }
+  :root[data-motion="reduced"] .portrait:hover .hearts span, :root[data-motion="reduced"] .portrait:focus-visible .hearts span, :root[data-motion="reduced"] .portrait[aria-pressed="true"] .hearts span { animation: heart-fade 1300ms ease calc(780ms + var(--d)) both; }
+
 @keyframes smile-fade { 0%, 36% { opacity: 1; } 44%, 74% { opacity: 0; } 84%, 100% { opacity: 1; } }
 @keyframes wink-fade { 0%, 36% { opacity: 0; } 44%, 74% { opacity: 1; } 84%, 100% { opacity: 0; } }
 @keyframes heart-fade {
@@ -126,12 +135,18 @@
 @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
 @media (prefers-reduced-motion: reduce) {
   /* no scaling, springs or floating: the bubble just fades in, piece by piece */
-  .bubble .dot, .bubble .cloud, .bubble .reaction { transform: none !important; animation: none !important; transition: opacity 200ms ease !important; }
-  .bubble.active .b1 { transition-delay: 0ms !important; }
-  .bubble.active .b2 { transition-delay: 120ms !important; }
-  .bubble.active .cloud { transition-delay: 240ms !important; }
-  .bubble.active .reaction { transition-delay: 380ms !important; }
+  :root:not([data-motion="full"]) .bubble .dot, :root:not([data-motion="full"]) .bubble .cloud, :root:not([data-motion="full"]) .bubble .reaction { transform: none !important; animation: none !important; transition: opacity 200ms ease !important; }
+  :root:not([data-motion="full"]) .bubble.active .b1 { transition-delay: 0ms !important; }
+  :root:not([data-motion="full"]) .bubble.active .b2 { transition-delay: 120ms !important; }
+  :root:not([data-motion="full"]) .bubble.active .cloud { transition-delay: 240ms !important; }
+  :root:not([data-motion="full"]) .bubble.active .reaction { transition-delay: 380ms !important; }
 }
+:root[data-motion="reduced"] .bubble .dot, :root[data-motion="reduced"] .bubble .cloud, :root[data-motion="reduced"] .bubble .reaction { transform: none !important; animation: none !important; transition: opacity 200ms ease !important; }
+  :root[data-motion="reduced"] .bubble.active .b1 { transition-delay: 0ms !important; }
+  :root[data-motion="reduced"] .bubble.active .b2 { transition-delay: 120ms !important; }
+  :root[data-motion="reduced"] .bubble.active .cloud { transition-delay: 240ms !important; }
+  :root[data-motion="reduced"] .bubble.active .reaction { transition-delay: 380ms !important; }
+
 @media (max-width: 700px) {
   .bubble .cloud { width: 100px; height: 71px; top: -106px; }
   .bubble .reaction { font-size: 32px; }

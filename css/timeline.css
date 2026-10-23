@@ -41,5 +41,7 @@ html.has-3d .experience-list { position: absolute; width: 1px; height: 1px; over
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card .content, .labels span { transition: none; }
+  :root:not([data-motion="full"]) .card .content, :root:not([data-motion="full"]) .labels span { transition: none; }
 }
+:root[data-motion="reduced"] .card .content, :root[data-motion="reduced"] .labels span { transition: none; }
+

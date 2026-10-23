@@ -1,6 +1,10 @@
 /* Global styles, navigation, sections, contact and scroll reveals */
 html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="full"]) { scroll-behavior: auto; }
+}
+html[data-motion="reduced"] { scroll-behavior: auto; }
+
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
@@ -29,6 +33,16 @@ a:hover { text-decoration-thickness: 2px; }
 .nav nav { margin-left: auto; }
 .theme-toggle { width: 44px; height: 44px; flex: none; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 1.5px solid var(--line); background: transparent; color: var(--graphite); cursor: pointer; }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.motion-toggle { min-height: 44px; padding: 0 16px; flex: none; border-radius: 999px; border: 1.5px solid var(--line); background: transparent; color: var(--graphite); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.motion-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.motion-toggle[hidden] { display: none; }
+@media (max-width: 700px) {
+  /* phones: brand and toggles on the first row, section links on the second */
+  .nav { gap: 10px 8px; }
+  .nav nav { order: 3; width: 100%; margin-left: 0; }
+  .motion-toggle { margin-left: auto; padding: 0 14px; font-size: 14px; }
+  .motion-toggle[hidden] + .theme-toggle { margin-left: auto; }
+}
 .theme-toggle .sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .moon { display: none; }
 :root[data-theme="dark"] .theme-toggle .sun { display: block; }

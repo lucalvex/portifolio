@@ -49,26 +49,27 @@ export function createCapybara(scene) {
   var currentLane = 0, targetLane = 0, hopStart = -1, hopFrom = 0, lastMove = 0, previousFocus = 0, facing = 1;
 
   // focus: point in time, in months; x: position in the scene; laneToZ: converts a lane to z;
-  // reduceMotion: no walking, blinking or hopping, the capybara just sits on the active bar
+  // reduceMotion: it still walks while the visitor scrolls, but slides between lanes
+  // instead of hopping, doesn't bob while walking and doesn't blink on its own
   function update(focus, x, laneToZ, activeLane, reduceMotion) {
     // walk while scrolling, sit when idle, hop between lanes
     var nowMs = performance.now();
     var step = focus - previousFocus; previousFocus = focus;
     if (Math.abs(step) > 0.004) { lastMove = nowMs; facing = step > 0 ? 1 : -1; }
-    var walking = !reduceMotion && nowMs - lastMove < 260;
+    var walking = nowMs - lastMove < 260;
     if (walking) drawCapybara(Math.floor(nowMs / 140) % 2 ? 'walkA' : 'walkB', false);
     else drawCapybara('sitting', !reduceMotion && (nowMs % 3200) < 160);
     capybaraTexture.repeat.x = facing; capybaraTexture.offset.x = facing < 0 ? 1 : 0;
     var newLane = activeLane;
-    if (newLane !== targetLane) { hopFrom = currentLane; targetLane = newLane; hopStart = reduceMotion ? -1 : nowMs; }
+    if (newLane !== targetLane) { hopFrom = currentLane; targetLane = newLane; hopStart = nowMs; }
     var hopHeight = 0;
     if (hopStart >= 0) {
       var ts = Math.min(1, (nowMs - hopStart) / 480);
       currentLane = hopFrom + (targetLane - hopFrom) * (ts * ts * (3 - 2 * ts));
-      hopHeight = Math.sin(ts * Math.PI) * 0.35;
+      hopHeight = reduceMotion ? 0 : Math.sin(ts * Math.PI) * 0.35;
       if (ts >= 1) hopStart = -1;
     } else currentLane = targetLane;
-    capybaraSprite.position.set(x, 0.045 + hopHeight + (walking ? Math.abs(Math.sin(nowMs / 70)) * 0.015 : 0), laneToZ(currentLane));
+    capybaraSprite.position.set(x, 0.045 + hopHeight + (walking && !reduceMotion ? Math.abs(Math.sin(nowMs / 70)) * 0.015 : 0), laneToZ(currentLane));
   }
 
   return { update };

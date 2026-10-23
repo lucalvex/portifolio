@@ -3,6 +3,7 @@
 // and strikes poses on its own when nobody is interacting.
 import { GESTURES, REACTIONS, IDLE_POSES, vector } from './poses.js';
 import { createBubble } from './bubble.js';
+import { prefersReducedMotion } from '../motion.js';
 
 export function initHero() {
   if (!window.THREE) return;
@@ -10,7 +11,7 @@ export function initHero() {
   var canvas = document.getElementById('pose-canvas');
   var stage = canvas.parentElement;
   var detectionBox = document.getElementById('detection-box');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduceMotion = prefersReducedMotion();
   var heroSection = document.getElementById('home');
   var heroVisible = true;
   new IntersectionObserver(function (es) { heroVisible = es[0].isIntersecting; }).observe(heroSection);
@@ -155,14 +156,15 @@ export function initHero() {
     [7, 8, 9, 10].forEach(function (k) {
       var desired = targets[k] || current[k];
       if (!smoothed[k]) smoothed[k] = current[k].clone();
-      var rate = reduceMotion ? 1 : (g || smoothed[k].distanceTo(desired) > 0.004 ? 0.085 : 1);
+      // with reduced motion, gestures still blend, just more slowly
+      var rate = g || smoothed[k].distanceTo(desired) > 0.004 ? (reduceMotion ? 0.05 : 0.085) : 1;
       smoothed[k].lerp(desired, rate);
       current[k].copy(smoothed[k]);
     });
     var targetHeadTilt = g ? (g.headTilt || 0) : 0;
     var targetLean = g ? (g.lean || 0) + (g.dance ? Math.sin(t * 2.6) * 0.09 : 0) : 0;
-    headTiltSmooth += (targetHeadTilt - headTiltSmooth) * (reduceMotion ? 1 : 0.085);
-    leanSmooth += (targetLean - leanSmooth) * (reduceMotion ? 1 : 0.085);
+    headTiltSmooth += (targetHeadTilt - headTiltSmooth) * (reduceMotion ? 0.05 : 0.085);
+    leanSmooth += (targetLean - leanSmooth) * (reduceMotion ? 0.05 : 0.085);
     // torso leans toward the cursor
     var hips = tmp.copy(current[11]).add(current[12]).multiplyScalar(0.5).clone();
     rotateAround([0,1,2,3,4,5,6,7,8,9,10], hips, axisZ, -curX * 0.07 + leanSmooth);

@@ -1,7 +1,9 @@
 // Text and lists ease in while scrolling, in both directions,
 // and reset when they leave the viewport.
+import { prefersReducedMotion } from './motion.js';
+
 export function initReveal() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  if (prefersReducedMotion() || !('IntersectionObserver' in window)) return;
   document.documentElement.classList.add('anim');
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {

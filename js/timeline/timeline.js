@@ -1,14 +1,15 @@
 // Scroll-driven 3D timeline: the camera travels from 2023 to today
 // over three parallel lanes, and the card shows the experience in focus.
 // Without WebGL, the page shows the plain list instead. With reduced motion,
-// the scene still follows the scroll, but without easing, walking or parallax.
+// the scene still follows the scroll, but without easing, hopping or parallax.
 import { TODAY, items, years } from './data.js';
 import { applyPixelBackground } from './pixel-background.js';
 import { createCapybara } from './capybara.js';
+import { prefersReducedMotion } from '../motion.js';
 
 export function initTimeline() {
   if (!window.THREE) return;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reduceMotion = prefersReducedMotion();
 
   var canvas = document.getElementById('timeline-canvas');
   var probe = document.createElement('canvas');

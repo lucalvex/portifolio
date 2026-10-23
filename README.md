@@ -22,7 +22,9 @@ Hero is more than decoration: it answers questions about my background, reacts t
 
 ## Accessibility
 
-- With reduced motion enabled in the operating system, automatic animations are turned off and the timeline becomes a plain list.
+- With reduced motion enabled in the operating system, the page switches to a calmer mode: no automatic animations, parallax or bounces, while interactions use gentle fades. The 3D timeline still follows the scroll.
+- When the system asks for reduced motion, a motion toggle appears next to the theme toggle, so visitors whose computer has animations turned off by default (common on work machines) can turn the full experience on. The choice is saved in the browser.
+- Without WebGL support, the timeline becomes a plain list.
 - Every control works with the keyboard, with a visible focus ring.
 - Hero's answers are announced by screen readers, while the purely visual 3D elements are hidden from them.
 - Responsive layout for phones, tablets and desktops.
@@ -48,6 +50,7 @@ Hero is more than decoration: it answers questions about my background, reacts t
 └── js/
     ├── main.js               entry point, initializes each part
     ├── theme.js              light and dark theme toggle
+    ├── motion.js             motion preference and motion toggle
     ├── navigation.js         menu scrolling and footer year
     ├── portrait.js           photo flip on tap
     ├── questions.js          Hero's questions and answers
