@@ -11,10 +11,10 @@ export function createBubble(element, reaction, reduceMotion) {
     const hadOne = currentEmoji !== null;
     currentEmoji = emoji;
     if (!emoji) { element.classList.remove('active'); return; }
-    if (hadOne && !reduceMotion) {
+    if (hadOne) {
       // collapse the current bubble before opening the new one
       element.classList.remove('active');
-      swapTimer = setTimeout(() => { reaction.textContent = emoji; element.classList.add('active'); }, 420);
+      swapTimer = setTimeout(() => { reaction.textContent = emoji; element.classList.add('active'); }, reduceMotion ? 220 : 420);
     } else {
       reaction.textContent = emoji;
       element.classList.add('active');
