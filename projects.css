@@ -1,0 +1,36 @@
+/* Projects */
+.projects { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.projects > li { border-bottom: 1px solid var(--line); }
+.projects summary {
+  list-style: none; cursor: pointer; display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 32px; gap: 24px; align-items: baseline;
+  padding: 28px 0; min-height: 48px;
+}
+.projects summary::-webkit-details-marker { display: none; }
+.projects .name {
+  font-family: "Bricolage Grotesque", sans-serif; font-variation-settings: "opsz" 48, "wdth" 85;
+  font-weight: 650; font-size: clamp(26px, 3.2vw, 38px); line-height: 1.05; letter-spacing: -0.02em;
+}
+.projects .excerpt { color: var(--mist); }
+.projects .toggle-icon { width: 32px; height: 32px; justify-self: end; align-self: center; position: relative; }
+.projects .toggle-icon::before, .projects .toggle-icon::after {
+  content: ""; position: absolute; left: 7px; right: 7px; top: 15px; height: 2px; background: var(--graphite);
+  transition: transform 260ms ease;
+}
+.projects .toggle-icon::after { transform: rotate(90deg); }
+details[open] .toggle-icon::after { transform: rotate(0deg); }
+.projects summary:hover .name { color: var(--accent); }
+.details-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 32px; gap: 24px; padding: 0 0 32px; }
+.details-body .text { grid-column: 2; max-width: 60ch; }
+.details-body p { margin: 0 0 14px; }
+.details-body dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin: 18px 0 0; font-size: 16px; }
+.details-body dt { color: var(--mist); }
+.details-body dd { margin: 0; }
+
+
+@media (max-width: 700px) {
+  .projects summary, .details-body { grid-template-columns: minmax(0, 1fr) 32px; gap: 8px 16px; }
+  .projects .excerpt { grid-column: 1; grid-row: 2; }
+  .projects .toggle-icon { grid-column: 2; grid-row: 1 / span 2; }
+  .details-body .text { grid-column: 1; }
+}

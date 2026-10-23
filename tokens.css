@@ -1,0 +1,37 @@
+/* Light and dark theme colors. Dark applies via the system setting or the toggle (data-theme). */
+
+:root {
+  --ice: #E8EDF1;
+  --graphite: #1B2430;
+  --accent: #2B59FF;
+  --mist: #5D6B7B;
+  --line: #C9D2DC;
+  --surface: #FFFFFF;
+  --bones: #1B2430;
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ice: #121A23;
+    --graphite: #E3E9EF;
+    --accent: #7B96FF;
+    --mist: #9AA8B8;
+    --line: #2A3644;
+    --surface: #1A2430;
+    --bones: #C8D2DD;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ice: #121A23;
+  --graphite: #E3E9EF;
+  --accent: #7B96FF;
+  --mist: #9AA8B8;
+  --line: #2A3644;
+  --surface: #1A2430;
+  --bones: #C8D2DD;
+  color-scheme: dark;
+}

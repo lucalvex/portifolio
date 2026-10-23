@@ -1,0 +1,138 @@
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; gap: clamp(16px, 4vw, 48px); min-height: min(86vh, 820px); padding-bottom: 32px; }
+.hero h1 {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-variation-settings: "opsz" 96, "wdth" 78;
+  font-weight: 760;
+  font-size: clamp(56px, 9vw, 128px);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  margin: 0 0 32px;
+  text-wrap: balance;
+}
+.lead { font-size: clamp(19px, 2vw, 24px); line-height: 1.45; max-width: 32ch; margin: 0 0 16px; }
+.context { color: var(--mist); max-width: 36ch; margin: 0 0 32px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px;
+  border-radius: 999px; font-weight: 700; font-size: 17px; text-decoration: none;
+  border: 2px solid var(--graphite); color: var(--graphite);
+}
+.btn.primary { background: var(--graphite); color: var(--ice); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent); color: #fff; }
+
+.stage { position: relative; }
+.stage canvas { display: block; width: 100%; height: clamp(320px, 50vh, 560px); touch-action: pan-y; }
+.conversation { margin-top: 8px; }
+.answer { min-height: 7.2em; margin: 14px 0 0; padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; font-size: 17px; line-height: 1.5; }
+.answer.empty { color: var(--mist); }
+.answer .speech { display: block; transition: opacity 220ms ease, transform 260ms ease; }
+.answer .speech.swap { opacity: 0; transform: translateY(6px); }
+.questions { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
+.questions button {
+  font: inherit; font-size: 15px; font-weight: 700; color: var(--graphite); background: transparent;
+  border: 1.5px solid var(--line); border-radius: 999px; min-height: 44px; padding: 0 16px; cursor: pointer;
+}
+.questions button:hover { border-color: var(--accent); color: var(--accent); }
+.questions button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.detection-box {
+  position: absolute; pointer-events: none; opacity: 0; transition: opacity 600ms ease;
+  border: 1.5px solid var(--accent);
+}
+.detection-box.visible { opacity: 1; }
+.detection-box span {
+  position: absolute; left: -1.5px; bottom: 100%;
+  background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+  padding: 2px 8px; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.caption { margin: 0 0 10px; color: var(--mist); font-size: 15px; }
+
+
+/* Photo that flips into a face that winks and releases hearts */
+.portrait { position: relative; display: block; width: 112px; height: 112px; padding: 0; margin: 0 0 32px; border: 0; background: none; border-radius: 50%; cursor: pointer; perspective: 600px; }
+.portrait:focus-visible { border-radius: 50%; }
+.portrait .face, .portrait .hearts span { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; line-height: 1; }
+.portrait .coin { position: absolute; inset: 0; display: block; transform-style: preserve-3d; transition: transform 560ms cubic-bezier(.3,.7,.3,1); }
+.portrait .side { position: absolute; inset: 0; display: block; border-radius: 50%; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden; box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--line); }
+.portrait .back { transform: rotateY(180deg); background: #C9D6F8; }
+.portrait .photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.portrait .face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 68px; transform-origin: 50% 60%; will-change: opacity, transform; }
+.portrait .wink { opacity: 0; }
+.portrait .hearts { position: absolute; left: 58%; top: 2%; width: 0; height: 0; z-index: 3; pointer-events: none; }
+.portrait .hearts span { position: absolute; left: 0; top: 0; font-size: 18px; opacity: 0; }
+.portrait:hover .coin, .portrait:focus-visible .coin, .portrait[aria-pressed="true"] .coin { transform: rotateY(180deg); }
+.portrait:hover .smile, .portrait:focus-visible .smile, .portrait[aria-pressed="true"] .smile { animation: smile-out 2000ms ease-in-out both; }
+.portrait:hover .wink, .portrait:focus-visible .wink, .portrait[aria-pressed="true"] .wink { animation: wink-in 2000ms ease-in-out both; }
+.portrait:hover .hearts span, .portrait:focus-visible .hearts span, .portrait[aria-pressed="true"] .hearts span { animation: heart-float 1200ms cubic-bezier(.2,.8,.3,1) calc(780ms + var(--d)) both; }
+/* the wink: the face tilts slightly, both emojis crossfade and 😉 does a small bounce */
+@keyframes smile-out {
+  0%, 36% { opacity: 1; transform: rotate(0deg) scale(1); }
+  44% { opacity: 0; transform: rotate(-7deg) scale(1.04); }
+  74% { opacity: 0; transform: rotate(-7deg) scale(1.04); }
+  84%, 100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+@keyframes wink-in {
+  0%, 36% { opacity: 0; transform: rotate(0deg) scale(1); }
+  44% { opacity: 1; transform: rotate(-7deg) scale(1.07); }
+  52% { transform: rotate(-5deg) scale(0.98); }
+  60%, 70% { opacity: 1; transform: rotate(-6deg) scale(1.01); }
+  84%, 100% { opacity: 0; transform: rotate(0deg) scale(1); }
+}
+@keyframes heart-float {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  20% { opacity: 1; transform: translate(calc(var(--dx) * 0.4), -10px) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), -54px) scale(0.85) rotate(calc(var(--dx) * 0.8deg)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait .coin { transition: none !important; }
+  .portrait:hover .smile, .portrait:focus-visible .smile, .portrait[aria-pressed="true"] .smile,
+  .portrait:hover .hearts span, .portrait:focus-visible .hearts span, .portrait[aria-pressed="true"] .hearts span { animation: none; }
+  .portrait:hover .wink, .portrait:focus-visible .wink, .portrait[aria-pressed="true"] .wink { animation: none; opacity: 1; }
+  .portrait:hover .smile, .portrait:focus-visible .smile, .portrait[aria-pressed="true"] .smile { opacity: 0; }
+}
+/* Hero's thought bubble */
+.bubble { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; z-index: 2; }
+.bubble .dot, .bubble .cloud { position: absolute; display: block; transform: scale(0); opacity: 0; filter: drop-shadow(0 0 0.6px var(--line)) drop-shadow(0 6px 14px rgba(27, 36, 48, 0.12)); }
+.bubble .dot { border-radius: 50%; background: var(--surface); }
+.bubble .b1 { left: 12px; top: -12px; width: 9px; height: 9px; }
+.bubble .b2 { left: 26px; top: -34px; width: 15px; height: 15px; }
+.bubble .cloud { left: 36px; top: -122px; width: 124px; height: 88px; transform-origin: 8% 96%; }
+.bubble .cloud svg { display: block; width: 100%; height: 100%; fill: var(--surface); overflow: visible; }
+.bubble .reaction { position: absolute; inset: 0 0 6px 0; display: flex; align-items: center; justify-content: center; font-size: 40px; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; transform: scale(0.2) rotate(-12deg); opacity: 0; }
+/* leaving: disappears in reverse order, quickly */
+.bubble .reaction { transition: transform 160ms ease, opacity 120ms ease; transition-delay: 0ms; }
+.bubble .cloud { transition: transform 220ms cubic-bezier(.4,0,1,1), opacity 180ms ease; transition-delay: 80ms; }
+.bubble .b2 { transition: transform 180ms ease-in, opacity 160ms ease; transition-delay: 170ms; }
+.bubble .b1 { transition: transform 180ms ease-in, opacity 160ms ease; transition-delay: 230ms; }
+/* entering: dot by dot up to the cloud, with a spring effect */
+.bubble.active .dot, .bubble.active .cloud { transform: scale(1); opacity: 1; }
+.bubble.active .b1 { transition: transform 420ms cubic-bezier(.2,1.6,.4,1), opacity 160ms ease; transition-delay: 0ms; }
+.bubble.active .b2 { transition: transform 440ms cubic-bezier(.2,1.6,.4,1), opacity 160ms ease; transition-delay: 140ms; }
+.bubble.active .cloud { transition: transform 560ms cubic-bezier(.18,1.35,.4,1), opacity 200ms ease; transition-delay: 290ms; animation: float 3200ms ease-in-out 900ms infinite; }
+.bubble.active .reaction { transform: none; opacity: 1; transition: transform 460ms cubic-bezier(.2,1.7,.4,1), opacity 200ms ease; transition-delay: 560ms; }
+@keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@media (prefers-reduced-motion: reduce) {
+  .bubble .dot, .bubble .cloud, .bubble .reaction { transition: none !important; animation: none !important; }
+}
+@media (max-width: 700px) {
+  .bubble .cloud { width: 100px; height: 71px; top: -106px; }
+  .bubble .reaction { font-size: 32px; }
+}
+
+/* Portrait tablets: hero text starts at the top, next to Hero */
+@media (min-width: 701px) and (max-width: 1100px) and (orientation: portrait) {
+  .hero { align-items: start; padding-top: 16px; }
+  .hero > div:first-child { padding-top: 6vh; }
+}
+
+
+@media (max-width: 700px) {
+  .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .stage { height: auto; margin-top: 8px !important; }
+  .stage canvas { height: 42vh; min-height: 300px; }
+  .questions { flex-wrap: nowrap; overflow-x: auto; margin: 0 calc(-1 * clamp(20px, 5vw, 56px)); padding: 2px clamp(20px, 5vw, 56px) 6px; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .questions::-webkit-scrollbar { display: none; }
+  .questions li { flex: none; scroll-snap-align: start; }
+  .lead { max-width: none; }
+}
