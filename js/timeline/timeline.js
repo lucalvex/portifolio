@@ -1,17 +1,21 @@
 // Scroll-driven 3D timeline: the camera travels from 2023 to today
 // over three parallel lanes, and the card shows the experience in focus.
-// Without WebGL or with reduced motion, the page shows the plain list instead.
+// Without WebGL, the page shows the plain list instead. With reduced motion,
+// the scene still follows the scroll, but without easing, walking or parallax.
 import { TODAY, items, years } from './data.js';
 import { applyPixelBackground } from './pixel-background.js';
 import { createCapybara } from './capybara.js';
 
 export function initTimeline() {
-  if (!window.THREE || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.THREE) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var canvas = document.getElementById('timeline-canvas');
   var probe = document.createElement('canvas');
   if (!(probe.getContext('webgl') || probe.getContext('experimental-webgl'))) return;
   document.documentElement.classList.add('has-3d');
+  document.getElementById('experience-intro').textContent =
+    'Role para avançar no tempo, de 2023 até hoje. Experiências que aconteceram ao mesmo tempo correm em trilhas paralelas.';
 
   var track = document.getElementById('track');
   var labels = document.getElementById('labels');
@@ -104,7 +108,7 @@ export function initTimeline() {
     var total = track.offsetHeight - window.innerHeight;
     var p = Math.max(0, Math.min(1, -r.top / Math.max(1, total)));
     var target = p * (TODAY - 1);
-    focus += (target - focus) * 0.08;
+    focus += (target - focus) * (reduceMotion ? 1 : 0.08);
 
     // active item: the latest one that has started at the focused point in time
     var active = 0;
@@ -125,8 +129,8 @@ export function initTimeline() {
     var fx = monthToX(focus);
     if (narrow) { camera.position.set(fx - 0.5, 2.1, 4.4); camera.lookAt(fx - 0.15, -0.35, -0.9); }
     else { camera.position.set(fx - 1.8, 1.4, 3.0); camera.lookAt(fx - 0.3, -0.05, -0.9); }
-    capybara.update(focus, monthToX(focus) + 0.05, laneZ, items[active].lane);
-    background.parallax(focus / TODAY);
+    capybara.update(focus, monthToX(focus) + 0.05, laneZ, items[active].lane, reduceMotion);
+    if (!reduceMotion) background.parallax(focus / TODAY);
 
     renderer.render(scene, camera);
 

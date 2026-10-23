@@ -48,18 +48,19 @@ export function createCapybara(scene) {
   drawCapybara('sitting', false);
   var currentLane = 0, targetLane = 0, hopStart = -1, hopFrom = 0, lastMove = 0, previousFocus = 0, facing = 1;
 
-  // focus: point in time, in months; x: position in the scene; laneToZ: converts a lane to z
-  function update(focus, x, laneToZ, activeLane) {
+  // focus: point in time, in months; x: position in the scene; laneToZ: converts a lane to z;
+  // reduceMotion: no walking, blinking or hopping, the capybara just sits on the active bar
+  function update(focus, x, laneToZ, activeLane, reduceMotion) {
     // walk while scrolling, sit when idle, hop between lanes
     var nowMs = performance.now();
     var step = focus - previousFocus; previousFocus = focus;
     if (Math.abs(step) > 0.004) { lastMove = nowMs; facing = step > 0 ? 1 : -1; }
-    var walking = nowMs - lastMove < 260;
+    var walking = !reduceMotion && nowMs - lastMove < 260;
     if (walking) drawCapybara(Math.floor(nowMs / 140) % 2 ? 'walkA' : 'walkB', false);
-    else drawCapybara('sitting', (nowMs % 3200) < 160);
+    else drawCapybara('sitting', !reduceMotion && (nowMs % 3200) < 160);
     capybaraTexture.repeat.x = facing; capybaraTexture.offset.x = facing < 0 ? 1 : 0;
     var newLane = activeLane;
-    if (newLane !== targetLane) { hopFrom = currentLane; targetLane = newLane; hopStart = nowMs; }
+    if (newLane !== targetLane) { hopFrom = currentLane; targetLane = newLane; hopStart = reduceMotion ? -1 : nowMs; }
     var hopHeight = 0;
     if (hopStart >= 0) {
       var ts = Math.min(1, (nowMs - hopStart) / 480);

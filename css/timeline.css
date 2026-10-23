@@ -39,3 +39,7 @@ html.has-3d .experience-list { position: absolute; width: 1px; height: 1px; over
 @media (max-width: 700px) {
   .experience-list li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .card .content, .labels span { transition: none; }
+}
